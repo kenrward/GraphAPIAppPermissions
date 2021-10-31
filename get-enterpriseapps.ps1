@@ -75,7 +75,7 @@ foreach ($app in $Apps)
         }else{
             # Get User Role Assignments
             # https://graph.microsoft.com/v1.0/users/{id}/appRoleAssignments
-            $usrAssignURI = "https://{0}/v1.0/users/{1}/appRoleAssigments"
+            $usrAssignURI = "https://{0}/v1.0/users/{1}/appRoleAssigments" -f $graphURI,$e.principalId
             $usrAssignResult = Invoke-RestMethod -Uri $usrAssignURI -Headers $Headers
             $uAssignments = $usrAssignResult.value
             foreach ($uAssignment in $uAssignments){
