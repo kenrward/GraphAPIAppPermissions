@@ -73,9 +73,15 @@ foreach ($app in $Apps)
                 "{0}, {1}, {2}" -f $app.displayName,$member.displayName,$e.principalDisplayName | Out-File -FilePath output.csv -Append -Encoding ASCII
             }
         }else{
-         
-         # Found a user added to app directly, no group
-         "{0}, {1}, -" -f $app.displayName,$e.principalDisplayName | Out-File -FilePath output.csv -Append -Encoding ASCII
+            # Get User Role Assignments
+            # https://graph.microsoft.com/v1.0/users/{id}/appRoleAssignments
+            $usrAssignURI = "https://{0}/v1.0/users/{1}/appRoleAssigments"
+            $usrAssignResult = Invoke-RestMethod -Uri $usrAssignURI -Headers $Headers
+            $uAssignments = $usrAssignResult.value
+            foreach ($uAssignment in $uAssignments){
+                "{0}, {1}, -, {2}" -f $app.displayName,$e.principalDisplayName,$uAssignment | Out-File -FilePath output.csv -Append -Encoding ASCII
+            }
+            # Found a user added to app directly, no group
         }
     }
   }
